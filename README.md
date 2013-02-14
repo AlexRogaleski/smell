@@ -8,7 +8,7 @@ Aplicativos usados:
 - groovy/grails tool suite 3.0.0.
 - ireport 4.7.
 - Grails 2.1.1.
-- Plugin CloudFoundry (disponivel para download da propria dashboard da IDE, usado para fazer o upload no repositorio de
+- Plugin CloudFoundry (disponivel para download na propria dashboard da IDE, usado para fazer o upload no repositorio de
 testes Cloudfoundry).
 - Plugin do ireport.
 - Plugin Bootstrap Twitter.
