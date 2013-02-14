@@ -1,0 +1,4 @@
+ static mapping = {
+               endereco cascade: 'all'
+       }
+Endereco endereco

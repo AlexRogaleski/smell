@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="depostos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a4f68dfa-5604-4d11-b7ff-dde9ee929bb2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     sum(item_de_venda_quantidade0) AS item_de_venda_quantidade,
+     sum(item_de_compra_quantidade0) AS item_de_compra_quantidade,
+     (sum(item_de_compra_quantidade0) - sum(item_de_venda_quantidade0)) as 'total',
+     perfume_inspiracao0 AS perfume_inspiracao,
+     perfume_numero0 AS perfume_numero,
+     perfume_valor0 AS perfume_valor,
+     deposito_nome0 AS deposito_nome,
+     deposito_id0 AS deposito_id
+FROM
+((SELECT
+     sum(item_de_venda.`quantidade`) AS item_de_venda_quantidade0,
+     '0' AS 'item_de_compra_quantidade0',
+     perfume.`inspiracao` AS perfume_inspiracao0,
+     perfume.`numero` AS perfume_numero0,
+     perfume.`valor` AS perfume_valor0,
+     deposito.`nome` AS deposito_nome0,
+     deposito.`id` AS deposito_id0
+FROM
+     `deposito` deposito
+
+     INNER JOIN `venda` venda ON deposito.`id` = venda.`deposito_id`
+     INNER JOIN `venda_item_de_venda` venda_item_de_venda ON venda.`id` = venda_item_de_venda.`venda_itens_id`
+     INNER JOIN `item_de_venda` item_de_venda ON venda_item_de_venda.`item_de_venda_id` = item_de_venda.`id`
+     INNER JOIN `perfume` perfume ON item_de_venda.`perfume_id` = perfume.`id` group by 7,4)
+
+UNION all
+
+(SELECT
+     '0' AS 'item_de_venda_quantidade0',
+     sum(item_de_compra.`quantidade`) AS item_de_compra_quantidade0,
+     perfume.`inspiracao` AS perfume_inspiracao0,
+     perfume.`numero` AS perfume_numero0,
+     perfume.`valor` AS perfume_valor0,
+     deposito.`nome` AS deposito_nome0,
+     deposito.`id` AS deposito_id0
+FROM
+     `deposito` deposito
+
+     INNER JOIN `compra` compra ON deposito.`id` = compra.`deposito_id`
+     INNER JOIN `compra_item_de_compra` compra_item_de_compra ON compra.`id` = compra_item_de_compra.`compra_itens_id`
+     INNER JOIN `item_de_compra` item_de_compra ON compra_item_de_compra.`item_de_compra_id` = item_de_compra.`id`
+     INNER JOIN `perfume` perfume ON item_de_compra.`perfume_id` = perfume.`id` group by 7,4)) as estoque
+group by 4,5,6,7,8 order by deposito_id, perfume_numero]]>
+	</queryString>
+	<field name="item_de_venda_quantidade" class="java.lang.Double"/>
+	<field name="item_de_compra_quantidade" class="java.lang.Double"/>
+	<field name="total" class="java.lang.Double"/>
+	<field name="perfume_inspiracao" class="java.lang.String"/>
+	<field name="perfume_numero" class="java.lang.String"/>
+	<field name="perfume_valor" class="java.lang.Double"/>
+	<field name="deposito_nome" class="java.lang.String"/>
+	<field name="deposito_id" class="java.lang.Long"/>
+	<group name="deposito_id">
+		<groupExpression><![CDATA[$F{deposito_id}]]></groupExpression>
+		<groupHeader>
+			<band height="33">
+				<textField>
+					<reportElement uuid="c28528b3-79ea-4d78-b31c-61f6ed136e39" mode="Opaque" x="0" y="0" width="555" height="32" forecolor="#000000" backcolor="#E6E6E6"/>
+					<textElement>
+						<font size="24" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{deposito_nome}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="d908eae7-56bc-4ba1-928a-9562e47b5caa" x="-20" y="32" width="595" height="1" forecolor="#666666"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement uuid="f422a416-60cb-4dc6-8eb8-f4ebc83d1a27" mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#CC99FF"/>
+				<staticText>
+					<reportElement uuid="c00335be-3886-4578-87c3-7e4d2454cf9e" x="20" y="20" width="234" height="43" forecolor="#FFFFFF"/>
+					<textElement>
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[SMELL]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a9a2600d-3b77-4bed-86f0-98d44a200ee5" x="395" y="43" width="180" height="20" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Relatório de Estoque]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<line>
+				<reportElement uuid="c16e57c8-d2c0-48cc-8556-26839122fb9d" x="-20" y="20" width="595" height="1" forecolor="#666666"/>
+			</line>
+			<staticText>
+				<reportElement uuid="f03863a6-b2b8-40e8-bad0-5bafb3d27f61" mode="Opaque" x="395" y="0" width="79" height="20" forecolor="#000000" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Venda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8312f2b3-b944-4017-8394-12f7c6aa7614" mode="Opaque" x="316" y="0" width="79" height="20" forecolor="#000000" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a7db5c37-cf68-440a-9070-a6aff14fa1f7" mode="Opaque" x="474" y="0" width="81" height="20" forecolor="#000000" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f3e87d13-9262-4c44-bf18-d760c4a7e349" mode="Opaque" x="0" y="0" width="79" height="20" forecolor="#000000" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Left">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a1abb499-01bd-4853-a75f-5fb62be9344f" mode="Opaque" x="79" y="0" width="237" height="20" forecolor="#000000" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Left">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Inspiração]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement uuid="cbfb030e-ab15-4161-a6c5-5ccce88aed82" positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="70ef2869-7c97-4b33-a69d-359385066d99" x="316" y="0" width="79" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_de_compra_quantidade}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="d1757cf5-2db8-4a94-a2e2-b8c311b20d10" x="476" y="0" width="75" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="da1e32d4-7524-4445-8ae3-ebda04c3564a" x="12" y="0" width="67" height="20"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{perfume_numero}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="a6fea66e-75d5-47b8-84e3-084479159950" x="395" y="0" width="79" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{item_de_venda_quantidade}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="0f86872b-1dba-4e69-9849-b5b71cb84bbb" x="79" y="0" width="237" height="20"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{perfume_inspiracao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement uuid="a713278a-3c9d-4256-94f5-ebaf591ec020" mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="f0cebb81-ede7-4dac-935a-e51f149d52e5" mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="07278af9-8981-4352-b5f5-fed1e0aa71e3" x="0" y="4" width="100" height="13"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
